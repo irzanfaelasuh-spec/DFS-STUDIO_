@@ -2,10 +2,9 @@ package com.dfsstudio.dfsoptimization.video;
 
 import com.dfsstudio.dfsoptimization.DfsOptimizationClient;
 import com.dfsstudio.dfsoptimization.config.VideoSettings;
-import net.minecraft.client.CloudStatus;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.Options;
-import net.minecraft.client.ParticleStatus;
 
 import java.util.List;
 
@@ -31,12 +30,21 @@ public final class VanillaBridge {
         return s.sanitize();
     }
 
+    /**
+     * Sets an enum-valued option by constant name. The enum class is taken from the option's
+     * current value, so this code does not depend on which package the enum lives in.
+     */
+    private static <E extends Enum<E>> void setEnumByName(OptionInstance<E> option, String name) {
+        E current = option.get();
+        option.set(Enum.valueOf(current.getDeclaringClass(), name));
+    }
+
     /** Writes the settings to the vanilla options and saves options.txt. */
     public static void apply(Minecraft mc, VideoSettings wanted) {
         VideoSettings s = wanted.copy().sanitize();
         Options o = mc.options;
-        o.particles().set(ParticleStatus.valueOf(s.particles));
-        o.cloudStatus().set(CloudStatus.valueOf(s.clouds));
+        setEnumByName(o.particles(), s.particles);
+        setEnumByName(o.cloudStatus(), s.clouds);
         o.entityShadows().set(s.entityShadows);
         o.renderDistance().set(s.renderDistance);
         o.simulationDistance().set(s.simulationDistance);
