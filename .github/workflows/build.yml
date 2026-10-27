@@ -19,9 +19,26 @@ jobs:
         with:
           gradle-version: 9.2.1
 
-      # Production (remapped) jar. Tests are run in a separate step below.
       - name: Build jar
-        run: gradle build -x test --stacktrace
+        shell: bash
+        run: |
+          set -o pipefail
+          gradle build -x test --stacktrace --console=plain 2>&1 | tee build.log
+
+      - name: Show the error
+        if: failure()
+        shell: bash
+        run: |
+          grep -n -E "error:|What went wrong|FAILED|Caused by" build.log | head -40 | tee -a $GITHUB_STEP_SUMMARY || true
+          echo "-----"
+          tail -n 60 build.log
+
+      - name: Save full log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
 
       - name: Check jar contents
         run: |
