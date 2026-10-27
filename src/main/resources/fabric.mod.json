@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "dfsoptimization",
+  "version": "${version}",
+  "name": "DFS Optimization",
+  "description": "A configurable client-side performance mod for Minecraft: Java Edition. DFS Optimization provides practical graphics and rendering controls designed to reduce unnecessary visual workload. Actual performance gains depend on your hardware, settings, world, and other installed mods.",
+  "authors": [
+    "DFSstudio"
+  ],
+  "license": "MIT",
+  "icon": "assets/dfsoptimization/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.dfsstudio.dfsoptimization.DfsOptimizationClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": "1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
